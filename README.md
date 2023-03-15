@@ -85,5 +85,3 @@ pybo frontend 설치
 npm install
 npm run dev
 ```
-
-![Untitled](nano%20degree%202203bfca063c47e78473ba0b1fd73864/Untitled.png)
