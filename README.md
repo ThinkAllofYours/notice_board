@@ -1,8 +1,8 @@
 # nano degree
 
-frontend : next.js, react-bootstrap
-backend : flask, sqlalchemy
-python v3.10.10
+- frontend : next.js, react-bootstrap   
+- backend : flask, sqlalchemy   
+- python v3.10.10   
 
 project 구조
 ```
