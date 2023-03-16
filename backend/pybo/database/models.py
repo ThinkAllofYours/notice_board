@@ -39,37 +39,6 @@ class BaseModel(db.Model):
         raise NotImplementedError
 
 
-class Question(BaseModel):
-    id = db.Column(db.Integer, primary_key=True)
-    subject = db.Column(db.String(200), nullable=False)
-    content = db.Column(db.Text(), nullable=False)
-    create_date = db.Column(db.DateTime(), nullable=False)
-
-    def __init__(self, subject, content, create_date=None):
-        self.subject = subject
-        self.content = content
-        if create_date is None:
-            create_date = datetime.now(pytz.timezone("Asia/Seoul"))
-        self.create_date = create_date
-
-
-class Answer(BaseModel):
-    id = db.Column(db.Integer, primary_key=True)
-    question_id = db.Column(
-        db.Integer, db.ForeignKey("question.id", ondelete="CASCADE")
-    )
-    question = db.relationship("Question", backref=db.backref("answer_set"))
-    content = db.Column(db.Text(), nullable=False)
-    create_date = db.Column(db.DateTime(), nullable=False)
-
-    def __init__(self, question_id, content, create_date=None):
-        self.question_id = question_id
-        self.content = content
-        if create_date is None:
-            create_date = datetime.now(pytz.timezone("Asia/Seoul"))
-        self.create_date = create_date
-
-
 class Notice(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     author_name = db.Column(db.String(255), nullable=False)
@@ -109,3 +78,15 @@ class Notice(BaseModel):
 
     def __repr__(self):
         return f"<Notice {self.title}>"
+
+    def format_for_list(self):
+        return {
+            "id":self.id,
+            "title": self.title,
+            "views_count":self.views_count,
+            "recommends_count":self.recommends_count,
+            "not_recommends_count": self.not_recommends_count,
+            "created_date":self.created_date,
+            "prev_id":self.prev_id,
+            "next_id":self.next_id
+        }

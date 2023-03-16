@@ -18,9 +18,10 @@ def create_app():
 
     CORS(app)
     setup_db(app)
-    from .views import main_views
+    from .views import main_views, notice_views
 
     app.register_blueprint(main_views.bp)
+    app.register_blueprint(notice_views.bp)
 
     """
     error handlers

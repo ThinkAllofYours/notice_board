@@ -1,13 +1,18 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from ..auth.auth import requires_auth
+from ..database.models import db, Notice
+from config import app_config
+from sqlalchemy import select
 
 bp = Blueprint("main", __name__, url_prefix="/")
 
 
-@bp.route("/api/board", methods=["GET"])
-def get_board():
-    board = [
-        {"id": 1, "title": "Post 1", "content": "Post content 1"},
-        {"id": 2, "title": "Post 2", "content": "Post content 2"},
-    ]
-    return jsonify(board)
+@bp.route("/")
+def index():
+    return jsonify(
+        {
+            "success": True,
+        }
+    )
+
+

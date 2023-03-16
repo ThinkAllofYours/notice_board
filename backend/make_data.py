@@ -4,6 +4,7 @@ from datetime import datetime
 from pybo import create_app
 from pybo.database.models import Notice
 
+
 def setup_db():
     """Define database"""
     app = create_app()

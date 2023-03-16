@@ -8,6 +8,7 @@ class Config(object):
     TESTING = False
     CSRF_ENABLED = True
     SECRET_KEY = os.urandom(32)
+    NOTICES_PER_PAGE = 10
 
 
 class DevelopmentConfig(Config):
@@ -30,6 +31,11 @@ class Auth(object):
     API_AUDIENCE = "pybo"
 
 
-app_config = {"development": DevelopmentConfig, "testing": TestingConfig, "auth": Auth}
+app_config = {
+    "development": DevelopmentConfig,
+    "testing": TestingConfig,
+    "auth": Auth,
+    "NOTICES_PER_PAGE": 10,
+}
 
 FLASK_DEBUG = os.environ.get("FLASK_DEBUG", False)
