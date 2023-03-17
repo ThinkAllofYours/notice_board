@@ -82,11 +82,14 @@ class Notice(BaseModel):
     def format(self):
         return {
             "id":self.id,
+            "author_name":self.author_name,
             "title": self.title,
+            "content": self.content,
             "views_count":self.views_count,
             "recommends_count":self.recommends_count,
             "not_recommends_count": self.not_recommends_count,
             "created_date":self.created_date,
+            "updated_date":self.updated_date,
             "prev_id":self.prev_id,
             "next_id":self.next_id
         }

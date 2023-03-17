@@ -9,6 +9,7 @@ class Config(object):
     CSRF_ENABLED = True
     SECRET_KEY = os.urandom(32)
     NOTICES_PER_PAGE = 10
+    JSON_AS_ASCII = False
 
 
 class DevelopmentConfig(Config):
