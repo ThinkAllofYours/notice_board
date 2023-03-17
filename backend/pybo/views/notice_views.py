@@ -15,7 +15,7 @@ def get_notices():
     NOTICES_PER_PAGE = app_config["NOTICES_PER_PAGE"]
     start = (page - 1) * NOTICES_PER_PAGE
     notices = Notice.query.offset(start).limit(NOTICES_PER_PAGE).all()
-    formatted_notices = [notice.format_for_list() for notice in notices]
+    formatted_notices = [notice.format() for notice in notices]
     return jsonify(
         {
             "success": True,
@@ -32,7 +32,7 @@ def notice_detail(notice_id):
         notice = session.scalars(stmt).one()
     except:
         abort(404)
-    return jsonify({"success": True, "notice": notice.format_for_list()})
+    return jsonify({"success": True, "notice": notice.format()})
 
 
 @bp.route("/create", methods=["POST"])
@@ -42,12 +42,12 @@ def create_notice():
     title = data["title"]
     content = data["content"]
     if (
-        title is None
-        or title is ""
-        or author_name is None
-        or author_name is ""
-        or content is None
-        or content is ""
+        title == None
+        or title == ""
+        or author_name == None
+        or author_name == ""
+        or content == None
+        or content == ""
     ):
         abort(400)
 
@@ -65,7 +65,7 @@ def create_notice():
             next_id=None,
         )
         new_notice.insert()
-        return jsonify(new_notice.format_for_list()), 201
+        return jsonify(new_notice.format()), 201
     except:
         abort(422)
 
@@ -90,7 +90,7 @@ def modify_notice(notice_id):
             jsonify(
                 {
                     "success": True,
-                    "notice": notice.format_for_list(),
+                    "notice": notice.format(),
                 }
             ),
             200,

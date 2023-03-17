@@ -79,7 +79,7 @@ class Notice(BaseModel):
     def __repr__(self):
         return f"<Notice {self.title}>"
 
-    def format_for_list(self):
+    def format(self):
         return {
             "id":self.id,
             "title": self.title,
