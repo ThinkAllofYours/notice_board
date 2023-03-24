@@ -2,11 +2,11 @@ from flask import Blueprint, jsonify, request, abort
 from ..auth.auth import requires_auth
 from ..database.models import Notice, db
 from config import app_config
-from sqlalchemy import select
+from sqlalchemy import select, func
 import datetime
 import pytz
 
-bp = Blueprint("notices", __name__, url_prefix="/notices")
+bp = Blueprint("notice", __name__, url_prefix="/notice")
 
 
 @bp.route("/list", methods=["GET"])
@@ -15,11 +15,13 @@ def get_notices():
     NOTICES_PER_PAGE = app_config["NOTICES_PER_PAGE"]
     start = (page - 1) * NOTICES_PER_PAGE
     notices = Notice.query.offset(start).limit(NOTICES_PER_PAGE).all()
+    total_cnt = db.session.query(func.count(Notice.id)).scalar()
     formatted_notices = [notice.format() for notice in notices]
     return jsonify(
         {
             "success": True,
             "notices": formatted_notices,
+            "total_cnt": total_cnt,
         }
     )
 
@@ -30,12 +32,13 @@ def notice_detail(notice_id):
     stmt = select(Notice).where(Notice.id == notice_id)
     try:
         notice = session.scalars(stmt).one()
+        return jsonify({"success": True, "notice": notice.format()})
     except:
         abort(404)
-    return jsonify({"success": True, "notice": notice.format()})
 
 
 @bp.route("/create", methods=["POST"])
+@requires_auth("create:notice")
 def create_notice():
     data = request.get_json()
     author_name = data["author_name"]
@@ -50,6 +53,9 @@ def create_notice():
         or content == ""
     ):
         abort(400)
+
+    created_date = (datetime.datetime.now(pytz.timezone("Asia/Seoul")),)
+    updated_date = (datetime.datetime.now(pytz.timezone("Asia/Seoul")),)
 
     try:
         new_notice = Notice(
@@ -71,6 +77,7 @@ def create_notice():
 
 
 @bp.route("/modify/<int:notice_id>", methods=["POST"])
+@requires_auth("edit:notice")
 def modify_notice(notice_id):
     session = db.session
     stmt = select(Notice).where(Notice.id == notice_id)
@@ -95,11 +102,16 @@ def modify_notice(notice_id):
             ),
             200,
         )
+    except KeyError:
+        abort(400, "Missing fields in request data")
+    except ValueError:
+        abort(400, "Invalid request data")
     except:
         abort(422)
 
 
 @bp.route("/delete/<int:notice_id>", methods=["DELETE"])
+@requires_auth("delete:notice")
 def delete_notice(notice_id):
     session = db.session
     stmt = select(Notice).where(Notice.id == notice_id)
@@ -109,3 +121,17 @@ def delete_notice(notice_id):
         abort(404)
     notice.delete()
     return "Notice deleted", 204
+
+
+@bp.route("/increment-view/<int:notice_id>", methods=["PUT"])
+def increment_view_count(notice_id):
+    session = db.session
+    stmt = select(Notice).where(Notice.id == notice_id)
+    try:
+        notice = session.scalars(stmt).one()
+        notice.views_count += 1
+        notice.update()
+        return jsonify(success=True, views_count=notice.views_count)
+    except:
+        abort(404)
+

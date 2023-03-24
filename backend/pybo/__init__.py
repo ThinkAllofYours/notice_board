@@ -18,10 +18,11 @@ def create_app():
 
     CORS(app)
     setup_db(app)
-    from .views import main_views, notice_views
+    from .views import main_views, notice_views, reply_views
 
     app.register_blueprint(main_views.bp)
     app.register_blueprint(notice_views.bp)
+    app.register_blueprint(reply_views.bp)
 
     """
     error handlers
@@ -51,17 +52,13 @@ def create_app():
     @app.errorhandler(500)
     def internal_server_error(error):
         return (
-            jsonify(
-                {"success": False, "error": 500, "message": "Internal server error"}
-            ),
+            jsonify({"success": False, "error": 500, "message": "Internal server error"}),
             500,
         )
 
     @app.errorhandler(AuthError)
     def handle_auth_error(ex):
-        response = jsonify(
-            {"success": False, "error": ex.status_code, "message": ex.error}
-        )
+        response = jsonify({"success": False, "error": ex.status_code, "message": ex.error})
         response.status_code = ex.status_code
         return response
 

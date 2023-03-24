@@ -81,15 +81,42 @@ class Notice(BaseModel):
 
     def format(self):
         return {
-            "id":self.id,
-            "author_name":self.author_name,
+            "id": self.id,
+            "author_name": self.author_name,
             "title": self.title,
             "content": self.content,
-            "views_count":self.views_count,
-            "recommends_count":self.recommends_count,
+            "views_count": self.views_count,
+            "recommends_count": self.recommends_count,
             "not_recommends_count": self.not_recommends_count,
-            "created_date":self.created_date,
-            "updated_date":self.updated_date,
-            "prev_id":self.prev_id,
-            "next_id":self.next_id
+            "created_date": self.created_date,
+            "updated_date": self.updated_date,
+            "prev_id": self.prev_id,
+            "next_id": self.next_id,
+        }
+
+
+class Reply(BaseModel):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    author_name = db.Column(db.String(255), nullable=False)
+    created_date = db.Column(db.DateTime, nullable=False)
+    notice_id = db.Column(db.Integer, db.ForeignKey("notice.id"), nullable=False)
+    notice = db.relationship("Notice", backref=db.backref("replies", lazy=True, cascade="all"))
+
+    def __init__(self, content, author_name, created_date, notice_id):
+        self.content = content
+        self.author_name = author_name
+        self.created_date = created_date
+        self.notice_id = notice_id
+
+    def __repr__(self):
+        return f"<Reply {self.id}>"
+
+    def format(self):
+        return {
+            "id": self.id,
+            "content": self.content,
+            "author_name": self.author_name,
+            "created_date": self.created_date,
+            "notice_id": self.notice_id,
         }

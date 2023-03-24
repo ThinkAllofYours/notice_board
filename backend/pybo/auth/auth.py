@@ -47,9 +47,7 @@ def get_token_auth_header():
             401,
         )
     elif len(parts) == 1:
-        raise AuthError(
-            {"code": "invalid_header", "description": "Token not found."}, 401
-        )
+        raise AuthError({"code": "invalid_header", "description": "Token not found."}, 401)
     elif len(parts) > 2:
         raise AuthError(
             {
@@ -71,12 +69,8 @@ def check_permissions(permission, payload):
             400,
         )
 
-    print(payload)
-    print(payload["permissions"])
     if permission not in payload["permissions"]:
-        raise AuthError(
-            {"code": "unauthorized", "description": "Permission not found."}, 403
-        )
+        raise AuthError({"code": "unauthorized", "description": "Permission not found."}, 403)
 
     return True
 
@@ -84,9 +78,7 @@ def check_permissions(permission, payload):
 def verify_decode_jwt(token):
     header = jwt.get_unverified_header(token)
     if "kid" not in header:
-        raise AuthError(
-            {"code": "invalid_header", "description": "token should contain kid"}, 401
-        )
+        raise AuthError({"code": "invalid_header", "description": "token should contain kid"}, 401)
 
     # it should verify the token using Auth0 /.well-known/jwks.json
     iss = f"https://{AUTH0_DOMAIN}/"
@@ -108,7 +100,6 @@ def verify_decode_jwt(token):
             403,
         )
 
-    # it should decode the payload from the token
     try:
         payload = jwt.decode(
             token,
@@ -117,12 +108,8 @@ def verify_decode_jwt(token):
             audience=API_AUDIENCE,
             issuer=f"https://{AUTH0_DOMAIN}/",
         )
-
     except jwt.ExpiredSignatureError:
-        raise AuthError(
-            {"code": "token_expired", "description": "token is expired"}, 401
-        )
-
+        raise AuthError({"code": "token_expired", "description": "token is expired"}, 401)
     except jwt.JWTClaimsError:
         raise AuthError(
             {
@@ -131,7 +118,6 @@ def verify_decode_jwt(token):
             },
             401,
         )
-
     except Exception:
         raise AuthError(
             {
@@ -141,17 +127,6 @@ def verify_decode_jwt(token):
             401,
         )
 
-    # it should validate the claims
-    if payload.get("aud") != API_AUDIENCE or payload.get("iss") != iss:
-        raise AuthError(
-            {
-                "code": "invalid_header",
-                "description": "Invalid claims",
-            },
-            401,
-        )
-
-    # return the decoded payload
     return payload
 
 

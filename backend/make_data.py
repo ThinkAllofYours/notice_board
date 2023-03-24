@@ -1,15 +1,17 @@
 import requests
-import os
 from datetime import datetime
 from pybo import create_app
-from pybo.database.models import Notice, db
+from pybo.database.models import Notice, Reply
 from sqlalchemy import select
 
 def setup_db():
     """Define database"""
     app = create_app()
     notice_data = fetch_notice_data()
+
+    clear_notice_data(app)
     insert_notice_data(app, notice_data)
+    create_test_replies(app)
     print("===============all done==============")
 
 
@@ -31,10 +33,26 @@ def parse_date(date_string):
     except ValueError:
         return datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S")
 
-def clear_notice_data(app, notice_data):
+
+def clear_notice_data(app):
     with app.app_context():
-        for notice in notice_data:
+        notices = Notice.query.all()
+        for notice in notices:
             notice.delete()
+
+
+def create_test_replies(app, num_replies=5):
+    with app.app_context():
+        notices = Notice.query.all()
+        for notice in notices:
+            for i in range(num_replies):
+                reply = Reply(
+                    content=f"Test reply {i + 1} for notice {notice.id}",
+                    author_name=f"Author {i + 1}",
+                    created_date=datetime.utcnow(),
+                    notice_id=notice.id,
+                )
+                reply.insert()
 
 def insert_notice_data(app, notice_data):
     with app.app_context():
