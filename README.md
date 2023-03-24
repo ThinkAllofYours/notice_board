@@ -41,7 +41,7 @@ This project is organized into two main directories: `backend` for the Flask API
 
 ### Backend
 
-The Flask backend is organized into several modules:
+> The Flask backend is organized into several modules:
 
 - `config.py` contains the configuration settings for the application.
 - `migrations` contains the Alembic migration scripts for the database schema.
@@ -55,7 +55,6 @@ The Flask backend is organized into several modules:
 #### Backend Setup
 
 1. Install the required dependencies:
-
 ```bash
 pip install Flask
 pip install flask-migrate
@@ -74,23 +73,23 @@ export FLASK_DEBUG=true
 flask run
 ```
 
-Test the API with curl:bash
+> Test the API with curl:bash
 ```bash
 curl -X GET http://127.0.0.1:5000/api/board
 ```
 
-Use the Udacity Partner API for notice board data:bash
+> Use the Udacity Partner API for notice board data:bash
 ```bash
 https://api.udacitypartner.com/api/v1/information/notice/
 ```
 
-Configure the Pybo application with Auth0.Frontend
+>Configure the Pybo application with Auth0.Frontend
 
 The Next.js frontend is organized into several directories:```components``` contains reusable React components for the application's UI, such as the navigation bar, alert, notice card, notice list, and pagination.```pages``` contains the main application pages and their related API routes, organized by functionality.```public``` contains static assets, such as the favicon and example HTML files.```styles``` contains the CSS files for the application, organized by component and page.```utils``` contains utility functions used throughout the application.Frontend SetupInstall the required dependencies:bash
 ```bash
 npm install
 ```
-Run the Next.js development server:bash
+> Run the Next.js development server:bash
 ```bash
 npm run dev
 ```

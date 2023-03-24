@@ -101,7 +101,9 @@ class Reply(BaseModel):
     author_name = db.Column(db.String(255), nullable=False)
     created_date = db.Column(db.DateTime, nullable=False)
     notice_id = db.Column(db.Integer, db.ForeignKey("notice.id"), nullable=False)
-    notice = db.relationship("Notice", backref=db.backref("replies", lazy=True, cascade="all"))
+    notice = db.relationship(
+        "Notice", backref=db.backref("replies", lazy=True, cascade="all")
+    )
 
     def __init__(self, content, author_name, created_date, notice_id):
         self.content = content

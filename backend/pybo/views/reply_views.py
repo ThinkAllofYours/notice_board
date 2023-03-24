@@ -12,7 +12,9 @@ def get_replies(notice_id):
     if notice is None:
         abort(404)
 
-    replies = db.session.query(Reply).filter_by(notice_id=notice_id).all()  # Updated this line
+    replies = (
+        db.session.query(Reply).filter_by(notice_id=notice_id).all()
+    )  # Updated this line
     formatted_replies = [reply.format() for reply in replies]
 
     return jsonify({"success": True, "replies": formatted_replies})

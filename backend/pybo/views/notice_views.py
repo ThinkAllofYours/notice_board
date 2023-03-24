@@ -134,4 +134,3 @@ def increment_view_count(notice_id):
         return jsonify(success=True, views_count=notice.views_count)
     except:
         abort(404)
-

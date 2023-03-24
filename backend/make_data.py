@@ -4,6 +4,7 @@ from pybo import create_app
 from pybo.database.models import Notice, Reply
 from sqlalchemy import select
 
+
 def setup_db():
     """Define database"""
     app = create_app()
@@ -53,6 +54,7 @@ def create_test_replies(app, num_replies=5):
                     notice_id=notice.id,
                 )
                 reply.insert()
+
 
 def insert_notice_data(app, notice_data):
     with app.app_context():

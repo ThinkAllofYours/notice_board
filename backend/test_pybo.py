@@ -93,7 +93,9 @@ class PyboTestCase(unittest.TestCase):
             "title": "Updated Notice Title",
             "content": "This is an updated test notice content.",
         }
-        res = self.client.post(f"/notice/modify/{non_existing_notice_id}", json=update_notice)
+        res = self.client.post(
+            f"/notice/modify/{non_existing_notice_id}", json=update_notice
+        )
         self.assertEqual(res.status_code, 404)
 
     """ delete_notice """

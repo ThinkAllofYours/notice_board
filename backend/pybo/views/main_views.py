@@ -14,5 +14,3 @@ def index():
             "success": True,
         }
     )
-
-
