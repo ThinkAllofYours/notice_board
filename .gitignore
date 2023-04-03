@@ -1,15 +1,15 @@
 # Node.js dependencies
-/frontend/pybo/node_modules/
+node_modules/
 
 # Python virtual environment
-/backend/venv/
+venv/
 
 # Frontend build and cache directories
-/frontend/pybo/.next/
+.next/
 /frontend/pybo/out/
 
 # Backend cache directories
-/backend/__pycache__/
+__pycache__/
 
 # Environment variables and secrets
 *.env
@@ -27,7 +27,7 @@ test_python.py
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/frontend/pybo/.pnp
+pybo/.pnp
 .pnp.js
 
 # testing
